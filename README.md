@@ -61,7 +61,14 @@
 
 **Estimated effort: 2–3 hours**
 
-Start the container with `./docker/run_docker.sh`, then run `/workspace/scripts/build_qemu_image.sh` inside it to clone Buildroot (if needed), configure `qemu_aarch64_virt_defconfig`, and build the image.
+Use the root `Makefile` to build and run the Docker environment:
+
+```bash
+make docker-build
+make docker-run
+```
+
+`docker-run` starts an interactive container. To build the QEMU image in a temporary container instead, run `make qemu-image`; this builds the Docker image first if needed, then runs `/workspace/scripts/build_qemu_image.sh`. Run `make all` to perform the Docker and QEMU image builds in sequence.
 
 If Docker Desktop exits with the error below while running the build script, its Linux VM kernel has crashed in macOS `virtualization.framework`. This is a Docker Desktop virtualization failure, not a Buildroot configuration or QEMU guest error. The scripts save their combined output in timestamped log files under `build/` for troubleshooting.
 
