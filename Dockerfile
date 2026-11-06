@@ -3,6 +3,9 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+
 # Install development tools and Buildroot dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -22,11 +25,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libelf-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone the official Buildroot repository
-RUN git clone --depth 1 https://github.com/buildroot/buildroot.git /opt/buildroot
+RUN if ! getent group "${HOST_GID}" >/dev/null; then groupadd --gid "${HOST_GID}" hostuser; fi \
+    && useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --create-home --shell /bin/bash hostuser \
+    && mkdir -p /workspace \
+    && chown hostuser:"${HOST_GID}" /workspace
 
-# Set Buildroot as the working directory
-WORKDIR /opt/buildroot
+ENV HOME=/home/hostuser
+USER hostuser
+WORKDIR /workspace
 
 # Default shell
 CMD ["/bin/bash"]

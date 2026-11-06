@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="987" height="768" viewBox="0 0 987 768" role="img" aria-labelledby="title description">
+  <title id="title">Docker Desktop unexpected error</title>
+  <desc id="description">Docker Desktop encountered an unexpected error: fatal error reported: Linux kernel v6.10.14 crash on virtualization.framework.</desc>
+  <rect x="4" y="4" width="979" height="760" rx="18" fill="#10151b" stroke="#343b42" stroke-width="2"/>
+  <circle cx="32" cy="37" r="10" fill="#ff5f57"/>
+  <circle cx="66" cy="37" r="10" fill="#343a40"/>
+  <circle cx="100" cy="37" r="10" fill="#343a40"/>
+  <circle cx="65" cy="105" r="34" fill="#4d0714"/>
+  <path d="M65 88 80 96v19l-15 9-15-9V96z" fill="none" stroke="#ef5266" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M65 96v10m0 5v1" stroke="#ef5266" stroke-width="3" stroke-linecap="round"/>
+  <text x="126" y="116" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="30" font-weight="600">An unexpected error occurred</text>
+  <text x="31" y="165" fill="#8299ab" font-family="Arial, sans-serif" font-size="24">Docker Desktop encountered an unexpected error and needs to close.</text>
+  <text x="31" y="220" fill="#8299ab" font-family="Arial, sans-serif" font-size="23">Search our troubleshooting documentation to find a solution or workaround.</text>
+  <text x="31" y="257" fill="#8299ab" font-family="Arial, sans-serif" font-size="23">Alternatively, you can gather a diagnostics report and submit a support request or</text>
+  <text x="31" y="293" fill="#8299ab" font-family="Arial, sans-serif" font-size="23">GitHub issue.</text>
+  <rect x="31" y="346" width="936" height="135" rx="5" fill="#090c0f" stroke="#1c2329"/>
+  <rect x="60" y="375" width="781" height="33" fill="#385575"/>
+  <rect x="60" y="408" width="347" height="33" fill="#385575"/>
+  <text x="60" y="400" fill="#b8c5d0" font-family="Menlo, Monaco, monospace" font-size="23">fatal error reported: Linux kernel v6.10.14 crash on</text>
+  <text x="60" y="434" fill="#b8c5d0" font-family="Menlo, Monaco, monospace" font-size="23">virtualization.framework</text>
+  <rect x="959" y="347" width="7" height="27" rx="4" fill="#516c80"/>
+  <text x="31" y="553" fill="#1684ff" font-family="Arial, sans-serif" font-size="23">Read our policy for uploaded diagnostic data</text>
+  <rect x="697" y="510" width="270" height="67" rx="5" fill="#10151b" stroke="#1769ff" stroke-width="4"/>
+  <text x="727" y="552" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="23" font-weight="600">Gather diagnostics</text>
+  <rect x="31" y="608" width="337" height="67" rx="5" fill="#10151b" stroke="#1769ff" stroke-width="4"/>
+  <text x="61" y="650" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="23" font-weight="600">Reset to factory defaults</text>
+  <rect x="867" y="608" width="100" height="67" rx="6" fill="#1764e8"/>
+  <text x="895" y="650" fill="#fff" font-family="Arial, sans-serif" font-size="23" font-weight="600">Quit</text>
+</svg>

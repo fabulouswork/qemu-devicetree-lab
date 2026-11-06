@@ -29,26 +29,43 @@
   - `dts/`
   - `scripts/`
   - `notes/`
-- [ ] Write a Dockerfile using an ARM64 Linux base image.
-- [ ] Install development tools:
+- [X] Write a Dockerfile using an ARM64 Linux base image.
+- [X] Install development tools:
   - GCC / build tools
   - Git
   - Make
   - QEMU system emulator
   - Device Tree Compiler (`dtc`)
   - Useful inspection tools
-- [ ] Build and test the Docker image.
-- [ ] Verify tool versions:
-  - [ ] `uname -m`
-  - [ ] `qemu-system-aarch64 --version`
-  - [ ] `dtc --version`
-- [ ] Configure persistent volume mounting for the project directory.
+- [X] Build and test the Docker image.
+- [X] Verify tool versions:
+  - [X] `uname -m`
+  - [X] `qemu-system-aarch64 --version`
+  - [X] `dtc --version`
+- [X] Configure persistent volume mounting for the project directory.
+
+**Container environment snapshot:**
+
+| Check | Result |
+| --- | --- |
+| `uname -m` | `aarch64` |
+| Buildroot `git log -1 --oneline` | `b21d9e74` — `DEVELOPERS: add Angelo Compagnucci for imagemagick` |
+| `qemu-system-aarch64 --version` | QEMU emulator version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18) |
+| `dtc --version` | Version: DTC 1.7.0 |
+| `gcc --version` | gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0 |
+| `python3 --version` | Python 3.12.3 |
 
 **Milestone:** A reproducible ARM64 development environment is available through Docker.
 
 ## Phase 2 — Boot an ARM64 Linux guest
 
 **Estimated effort: 2–3 hours**
+
+Start the container with `./docker/run_docker.sh`, then run `/workspace/scripts/build_qemu_image.sh` inside it to clone Buildroot (if needed), configure `qemu_aarch64_virt_defconfig`, and build the image.
+
+If Docker Desktop exits with the error below while running the build script, its Linux VM kernel has crashed in macOS `virtualization.framework`. This is a Docker Desktop virtualization failure, not a Buildroot configuration or QEMU guest error. The scripts save their combined output in timestamped log files under `build/` for troubleshooting.
+
+![Docker Desktop error reporting a Linux kernel v6.10.14 crash on virtualization.framework](notes/docker-desktop-kernel-crash.svg)
 
 - [ ] Clone Buildroot.
 - [ ] Configure `qemu_aarch64_virt_defconfig`.
