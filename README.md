@@ -2,6 +2,8 @@
 
 **Goal:** Build a disposable ARM64 Linux development environment on a MacBook M2 using Docker and QEMU. Learn to inspect, modify, validate, and debug Linux Device Trees before applying the knowledge to the KR260 / SMK-K26 platform.
 
+**Inspiration:** [This ChatGPT conversation](https://chatgpt.com/c/6aed5f48-9e48-83ec-a5a1-912a1e9a64c7).
+
 **Estimated effort:** 12–16 hours  
 **Suggested duration:** 2–3 weeks  
 **Project directory:** `~/Projects/devicetree-lab`
@@ -21,7 +23,7 @@
 
 **Estimated effort: 1–2 hours**
 
-- [ ] Create project directory structure:
+- [X] Create project directory structure:
   - `docker/`
   - `buildroot/`
   - `dts/`
