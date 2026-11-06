@@ -26,12 +26,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if ! getent group "${HOST_GID}" >/dev/null; then groupadd --gid "${HOST_GID}" hostuser; fi \
-    && useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --create-home --shell /bin/bash hostuser \
+    && if ! getent passwd "${HOST_UID}" >/dev/null; then useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --create-home --shell /bin/bash hostuser; fi \
+    && mkdir -p /home/hostuser \
     && mkdir -p /workspace \
-    && chown hostuser:"${HOST_GID}" /workspace
+    && chown "${HOST_UID}:${HOST_GID}" /home/hostuser /workspace
 
 ENV HOME=/home/hostuser
-USER hostuser
+USER ${HOST_UID}:${HOST_GID}
 WORKDIR /workspace
 
 # Default shell
