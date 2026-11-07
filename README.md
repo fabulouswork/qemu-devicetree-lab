@@ -10,7 +10,7 @@
 
 ## Progress Tracker
 
-- [ ] Phase 1: Set up Docker environment (1–2 hours)
+- [X] Phase 1: Set up Docker environment (1–2 hours)
 - [ ] Phase 2: Boot an ARM64 Linux guest (2–3 hours)
 - [ ] Phase 3: Understand the Device Tree (2 hours)
 - [ ] Phase 4: Modify and validate the DTB (2–3 hours)
@@ -74,10 +74,10 @@ If Docker Desktop exits with the error below while running the build script, its
 
 ![Docker Desktop error reporting a Linux kernel v6.10.14 crash on virtualization.framework](notes/docker-desktop-kernel-crash.svg)
 
-- [ ] Clone Buildroot.
-- [ ] Configure `qemu_aarch64_virt_defconfig`.
-- [ ] Build the Linux kernel.
-- [ ] Build the root filesystem.
+- [X] Clone Buildroot.
+- [X] Configure `qemu_aarch64_virt_defconfig`.
+- [X] Build the Linux kernel.
+- [X] Build the root filesystem.
 - [ ] Generate the initial Device Tree Blob (DTB).
 - [ ] Create a QEMU launch script.
 - [ ] Boot ARM64 Linux using QEMU's `virt` machine.
