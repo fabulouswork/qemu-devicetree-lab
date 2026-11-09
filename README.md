@@ -94,6 +94,14 @@ If Docker Desktop exits with the error below while running the build script, its
 
 **Estimated effort: 2 hours**
 
+Dump QEMU's `virt` machine Device Tree and convert it to readable DTS:
+
+```bash
+make qemu-dts
+```
+
+This writes `build/virt.dtb` and `build/virt.dts`. This is QEMU's generated machine tree; it is separate from the live tree exposed by a running guest at `/sys/firmware/devicetree/base`.
+
 - [ ] Dump the live Device Tree from `/sys/firmware/devicetree/base`.
 - [ ] Convert the Device Tree into readable DTS format using `dtc`.
 - [ ] Explore important nodes:
@@ -120,6 +128,15 @@ If Docker Desktop exits with the error below while running the build script, its
 ## Phase 4 — Modify and validate the DTB
 
 **Estimated effort: 2–3 hours**
+
+After editing `build/virt.dts`, compile it and boot QEMU with the resulting DTB:
+
+```bash
+make dts-to-dtb
+make qemu-run-with-dtb
+```
+
+`dts-to-dtb` saves the current `build/virt.dtb` as `build/virt.dtb.bak` before compiling the edited DTS over it. `qemu-run-with-dtb` starts the guest with that DTB.
 
 - [ ] Extract the original DTS from the QEMU-generated DTB.
 - [ ] Create a custom DTS source file.
