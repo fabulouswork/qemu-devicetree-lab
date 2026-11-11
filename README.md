@@ -26,7 +26,7 @@
 - [X] Create project directory structure:
   - `docker/`
   - `buildroot/`
-  - `dts/`
+  - `experiments/`
   - `scripts/`
   - `notes/`
 - [X] Write a Dockerfile using an ARM64 Linux base image.
@@ -136,7 +136,35 @@ make dts-to-dtb
 make qemu-run-with-dtb
 ```
 
-`dts-to-dtb` saves the current `build/virt.dtb` as `build/virt.dtb.bak` before compiling the edited DTS over it. `qemu-run-with-dtb` starts the guest with that DTB.
+`dts-to-dtb` saves the current `build/virt.dtb` as `build/virt.dtb.bak`, if it exists, before compiling the edited DTS. Without `EXPERIMENT`, `qemu-run-with-dtb` starts the guest with the existing DTB.
+
+### Saved experiments
+
+Keep one standalone DTS per experiment in `experiments/`. The initial
+`first-device-tree.dts` is a copy of the existing lab tree, including its
+`demo,lab-marker` property. Copy it to a new `.dts` file for each new experiment.
+These trees target the lab's QEMU `virt` machine with a single Cortex-A53 CPU.
+
+Select an experiment to deploy, compile, and run in one command:
+
+```bash
+make qemu-run-with-dtb EXPERIMENT=experiments/02-add-device-node.dts
+```
+
+Set `EXPERIMENT` to the DTS path relative to the project root, including `.dts`.
+This creates `build/` if needed,
+copies the selected source to `build/virt.dts`, backs up an existing
+`build/virt.dtb`, compiles the new DTB, and starts QEMU only if all steps succeed.
+The saved experiment is left unchanged.
+
+To deploy without compiling or booting, use
+`make deploy-experiment EXPERIMENT=experiments/02-add-device-node.dts`. You can still run
+`make dts-to-dtb` and `make qemu-run-with-dtb` separately afterward, in sequence
+rather than as parallel Make goals.
+
+`make qemu-dts` regenerates the files in `build/` and overwrites any deployed
+experiment there; it does not change `experiments/`. Edit the saved DTS and
+deploy it again to keep experiment changes persistent.
 
 - [ ] Extract the original DTS from the QEMU-generated DTB.
 - [ ] Create a custom DTS source file.
