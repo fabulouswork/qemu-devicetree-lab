@@ -2,9 +2,9 @@
 
 IMAGE_NAME := qemu-devicetree-lab
 PROJECT_DIR := $(CURDIR)
-EXPERIMENT ?=
+DTS ?=
 
-.PHONY: all help docker-build docker-run qemu-image qemu-run qemu-dts deploy-experiment dts-to-dtb qemu-run-with-dtb
+.PHONY: all help docker-build docker-run qemu-image qemu-run qemu-dts deploy-dts dts-to-dtb qemu-run-with-dtb
 
 all: qemu-image
 
@@ -15,10 +15,10 @@ help:
 		'make qemu-image    Build the QEMU image inside a temporary container' \
 		'make qemu-run      Start QEMU using the existing image' \
 		'make qemu-dts      Generate the QEMU device tree source' \
-		'make deploy-experiment EXPERIMENT=<path.dts>  Copy the selected DTS to build/virt.dts' \
+		'make deploy-dts DTS=<path.dts>  Copy the selected DTS to build/virt.dts' \
 		'make dts-to-dtb    Convert the device tree source to a DTB' \
 		'make qemu-run-with-dtb  Start QEMU with the generated DTB' \
-		'  EXPERIMENT=<path.dts>  Deploy and compile this relative DTS path before starting QEMU' \
+		'  DTS=<path.dts>  Deploy and compile this relative DTS path before starting QEMU' \
 		'make all           Build the Docker image and then the QEMU image'
 
 docker-build:
@@ -49,11 +49,11 @@ qemu-dts:
 		-device virtio-blk-device,drive=hd0
 	dtc -I dtb -O dts -o build/virt.dts build/virt.dtb
 
-deploy-experiment:
-	@test -n "$(EXPERIMENT)" || { printf '%s\n' 'Specify EXPERIMENT=<relative-path.dts>.' >&2; exit 1; }
-	@test -f "$(EXPERIMENT)" || { printf '%s\n' "Experiment not found: $(EXPERIMENT)" >&2; exit 1; }
+deploy-dts:
+	@test -n "$(DTS)" || { printf '%s\n' 'Specify DTS=<relative-path.dts>.' >&2; exit 1; }
+	@test -f "$(DTS)" || { printf '%s\n' "Dts not found: $(DTS)" >&2; exit 1; }
 	mkdir -p build
-	cp "$(EXPERIMENT)" build/virt.dts
+	cp "$(DTS)" build/virt.dts
 
 dts-to-dtb: 
 	@if [ -f build/virt.dtb ]; then \
@@ -64,8 +64,8 @@ dts-to-dtb:
 	dtc -I dts -O dtb -o build/virt.dtb build/virt.dts
 
 qemu-run-with-dtb: 
-ifneq ($(strip $(EXPERIMENT)),)
-	$(MAKE) deploy-experiment
+ifneq ($(strip $(DTS)),)
+	$(MAKE) deploy-dts
 	$(MAKE) dts-to-dtb
 endif
 	./scripts/start-qemu.sh -dtb build/virt.dtb
