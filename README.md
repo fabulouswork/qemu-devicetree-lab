@@ -209,7 +209,88 @@ The module Makefile reads the configured kernel version from
 `buildroot/.config` and builds against that kernel's Buildroot output tree.
 The default ARM64 Buildroot cross-compiler is used; set `KERNEL_DIR`,
 `ARCH`, or `CROSS_COMPILE` on the `make` command line to override these paths
-or values.
+or values. The module is written to
+`drivers/dtlab_driver/output/dtlab_driver.ko`.
+
+### Automated module test
+
+From the project root, run:
+
+```bash
+make test-driver
+```
+
+This builds the module, copies and checks the Buildroot root filesystem in a
+temporary image, compiles `devicetrees/02-add-device-node.dts`, and boots QEMU. The guest
+loads the module and checks that it binds to the matching device. The test
+streams the guest console, prints `DTLAB_TEST: PASS` on success, shuts down the
+guest, and returns a nonzero status on failure or after a 180-second timeout.
+The original image is not modified.
+
+Build the Buildroot image first and stop any QEMU guest using it before running
+the test. The Linux environment needs `qemu-img`, `qemu-system-aarch64`,
+`debugfs` and `e2fsck` (from `e2fsprogs`), `dtc`, and `timeout`.
+
+### Manual test of a selected driver
+
+Build a driver and boot a temporary guest image containing its module:
+
+```bash
+make manual-test-driver DRIVER=drivers/dtlab_driver DTS=devicetrees/02-add-device-node.dts
+```
+
+In the guest, log in and run:
+
+```bash
+insmod /manual-test.ko
+dmesg | tail
+```
+
+`DRIVER` must name a directory under `drivers/` with a Makefile. The target
+builds it and searches for its `.ko` file. If there are multiple modules,
+select one with `MODULE=drivers/<directory>/<path-to-module.ko>`. Set `DTS`
+to a matching device tree when the driver needs one; otherwise QEMU uses its
+default device tree. Loading a module does not guarantee that it binds to a
+device.
+
+The test needs `qemu-img`, `qemu-system-aarch64`, `debugfs`, `e2fsck`, and
+`dtc` when `DTS` is set. Stop any guest using the Buildroot image before running
+the target. The original image remains unchanged; the module and guest changes
+are discarded when QEMU exits.
+
+### Manual one-off module test
+
+QEMU does not automatically see the module in the project directory. With
+QEMU stopped, use `debugfs` from `e2fsprogs` in the Linux environment to
+copy the module into the guest filesystem image. Run these commands from the
+project root after building the module and image:
+
+```bash
+KVER=$(sed -n 's/^BR2_LINUX_KERNEL_VERSION="\([^"]*\)"/\1/p' buildroot/.config)
+MOD="$PWD/drivers/dtlab_driver/output/dtlab_driver.ko"
+IMAGE="$PWD/buildroot/output/images/rootfs.ext4"
+debugfs -w -R "write $MOD /lib/modules/$KVER/dtlab_driver.ko" "$IMAGE"
+```
+
+This modifies the image directly; do not run it while QEMU is using the image.
+If the module already exists there, remove it with
+`debugfs -w -R "rm /lib/modules/$KVER/dtlab_driver.ko" "$IMAGE"` before
+repeating the copy. Rebuilding the Buildroot image replaces this one-off change.
+
+Boot with the DTS containing the matching `demo,dt-lab-device` node:
+
+```bash
+make qemu-run-with-dtb DTS=devicetrees/02-add-device-node.dts
+```
+
+In the guest, check that `uname -r` matches the module's build kernel, then
+load it and look for the probe message:
+
+```bash
+uname -r
+insmod /lib/modules/$(uname -r)/dtlab_driver.ko
+dmesg | tail
+```
 
 **Milestone:** Understand how Linux discovers a Device Tree device and binds it to a platform driver.
 

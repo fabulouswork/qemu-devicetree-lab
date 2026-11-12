@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     libncurses-dev \
     qemu-system-arm \
+    qemu-utils \
     device-tree-compiler \
     ca-certificates \
     libssl-dev \

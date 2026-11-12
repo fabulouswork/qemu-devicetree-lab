@@ -3,8 +3,10 @@
 IMAGE_NAME := qemu-devicetree-lab
 PROJECT_DIR := $(CURDIR)
 DTS ?=
+DRIVER ?=
+MODULE ?=
 
-.PHONY: all help docker-build docker-run qemu-image qemu-run qemu-dts deploy-dts dts-to-dtb qemu-run-with-dtb
+.PHONY: all help docker-build docker-run qemu-image qemu-run qemu-dts deploy-dts dts-to-dtb qemu-run-with-dtb test-driver manual-test-driver
 
 all: qemu-image
 
@@ -19,6 +21,8 @@ help:
 		'make dts-to-dtb    Convert the device tree source to a DTB' \
 		'make qemu-run-with-dtb  Start QEMU with the generated DTB' \
 		'  DTS=<path.dts>  Deploy and compile this relative DTS path before starting QEMU' \
+		'make test-driver   Build and test the driver in a disposable QEMU guest' \
+		'make manual-test-driver DRIVER=drivers/<dir> [DTS=<path.dts>] [MODULE=<path.ko>]' \
 		'make all           Build the Docker image and then the QEMU image'
 
 docker-build:
@@ -69,4 +73,10 @@ ifneq ($(strip $(DTS)),)
 	$(MAKE) dts-to-dtb
 endif
 	./scripts/start-qemu.sh -dtb build/virt.dtb
-	
+
+test-driver:
+	$(MAKE) -C drivers/dtlab_driver
+	./scripts/test-driver.sh devicetrees/02-add-device-node.dts
+
+manual-test-driver:
+	+./scripts/manual-test-driver.sh "$(DRIVER)" "$(DTS)" "$(MODULE)"
